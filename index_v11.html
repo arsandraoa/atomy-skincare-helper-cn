@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>艾多美女士护肤选品助手</title>
+
+<style>
+:root{
+  --blue:#2d86c7;
+  --blue-dark:#17659f;
+  --blue-light:#eaf6fd;
+  --blue-soft:#f5fbff;
+  --line:#dcecf6;
+  --text:#263746;
+  --muted:#748793;
+  --white:#ffffff;
+  --warm:#fff9ec;
+  --green:#f2faf6;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(180deg,#edf9ff 0%,#f9fcfe 50%,#f5f7f8 100%);
+  color:var(--text);
+}
+
+.container{
+  max-width:590px;
+  margin:auto;
+  padding:20px 16px 70px;
+}
+
+.card{
+  background:white;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:15px;
+  border:1px solid rgba(210,235,249,.9);
+  box-shadow:0 7px 28px rgba(36,117,170,.07);
+}
+
+.brand{
+  color:var(--blue);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.5px;
+}
+
+h1{
+  font-size:27px;
+  line-height:1.4;
+  margin:10px 0;
+}
+
+h2{
+  font-size:21px;
+  line-height:1.5;
+  margin:0 0 10px;
+}
+
+p{
+  line-height:1.75;
+  color:#60717e;
+}
+
+.small{
+  font-size:13px;
+  color:#8798a3;
+  line-height:1.7;
+}
+
+.tag{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  margin:3px 3px 3px 0;
+  background:var(--blue-light);
+  color:var(--blue-dark);
+  font-size:12px;
+}
+
+input[type="text"]{
+  width:100%;
+  padding:14px;
+  border:1px solid #d7e7f0;
+  border-radius:13px;
+  font-size:16px;
+  outline:none;
+}
+
+input[type="text"]:focus{
+  border-color:#68b5e4;
+}
+
+button{font-family:inherit;}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px;
+  margin-top:12px;
+  background:var(--blue);
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.secondary{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:13px;
+  margin-top:10px;
+  background:white;
+  color:var(--blue-dark);
+  font-size:15px;
+  cursor:pointer;
+}
+
+.option{
+  width:100%;
+  display:block;
+  border:2px solid transparent;
+  border-radius:14px;
+  padding:14px 15px;
+  margin-top:9px;
+  background:#f6fafc;
+  color:var(--text);
+  text-align:left;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.option:hover{background:var(--blue-light);}
+
+.option.selected{
+  background:var(--blue-light);
+  border-color:#72bce8;
+  color:var(--blue-dark);
+  font-weight:600;
+}
+
+.checkbox-option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.checkbox-option input{
+  width:18px;
+  height:18px;
+}
+
+#quiz,#results{display:none;}
+
+.question{display:none;}
+.question.active{display:block;}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.back{
+  border:0;
+  background:none;
+  color:var(--blue-dark);
+  padding:5px 0;
+  font-size:14px;
+  cursor:pointer;
+  min-width:62px;
+}
+
+.progress-bg{
+  flex:1;
+  height:7px;
+  background:#dcebf4;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress{
+  height:100%;
+  width:0;
+  background:var(--blue);
+  transition:.25s;
+}
+
+.q-number{
+  min-width:40px;
+  text-align:right;
+  font-size:12px;
+  color:#91a0aa;
+}
+
+/* RESULT */
+
+.profile-summary{
+  background:var(--blue-soft);
+  border-radius:14px;
+  padding:13px;
+  margin-top:14px;
+}
+
+.notice{
+  margin-top:12px;
+  padding:13px;
+  border-radius:13px;
+  background:#f7fbfd;
+  font-size:13px;
+  line-height:1.75;
+  color:#60717e;
+}
+
+.plan-main{
+  border:2px solid #74bbe5;
+  background:#fcfeff;
+  border-radius:18px;
+  padding:17px;
+}
+
+.plan-label{
+  color:var(--blue-dark);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:5px;
+}
+
+.product{
+  padding:18px 0;
+  border-bottom:1px solid #edf2f5;
+}
+
+.product:last-child{border-bottom:0;}
+
+.product-name{
+  font-size:17px;
+  font-weight:750;
+  line-height:1.5;
+}
+
+.product-price{color:var(--blue);}
+
+.simple-explain{
+  margin-top:10px;
+  line-height:1.75;
+  color:#536875;
+  font-size:14px;
+}
+
+.reason{
+  margin-top:10px;
+  padding:10px 12px;
+  background:#f3f9fd;
+  border-radius:11px;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.how-use{
+  margin-top:10px;
+  padding:11px 12px;
+  background:var(--blue-soft);
+  border-radius:11px;
+  font-size:13px;
+  line-height:1.7;
+}
+
+details{margin-top:12px;}
+
+summary{
+  color:var(--blue-dark);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  list-style:none;
+}
+
+summary::-webkit-details-marker{display:none;}
+
+summary::after{
+  content:"＋";
+  float:right;
+  font-size:16px;
+}
+
+details[open] summary::after{content:"－";}
+
+.detail-content{
+  margin-top:12px;
+  padding:13px;
+  background:#f7fafc;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.75;
+  color:#60717e;
+}
+
+.detail-title{
+  margin-top:11px;
+  color:#324b5a;
+  font-weight:700;
+}
+
+.detail-title:first-child{margin-top:0;}
+
+.price-box{
+  margin-top:16px;
+  padding:15px;
+  background:#f5fbff;
+  border-radius:14px;
+}
+
+.price-total{
+  font-size:22px;
+  font-weight:750;
+  color:#23485f;
+}
+
+.daily-use{
+  background:var(--blue-soft);
+  border-radius:15px;
+  padding:15px;
+  line-height:2;
+}
+
+.next-buy{
+  background:var(--warm);
+  border-radius:14px;
+  padding:15px;
+  color:#685b36;
+  font-size:14px;
+  line-height:1.75;
+}
+
+.alternative details{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.sales-box{
+  padding:14px;
+  margin-top:12px;
+  border-radius:13px;
+  background:#f7fafc;
+  line-height:1.8;
+  font-size:14px;
+}
+
+.advisor{
+  text-align:center;
+  margin:28px 0 18px;
+  color:#718391;
+}
+
+.advisor strong{color:var(--blue-dark);}
+
+.disclaimer{
+  margin-top:25px;
+  text-align:center;
+  color:#9aa6ae;
+  font-size:11px;
+  line-height:1.6;
+}
+
+hr{
+  border:0;
+  border-top:1px solid #edf2f5;
+  margin:16px 0;
+}
+
+/* ===== V7 result-card cleanup ===== */
+.product-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+  margin:14px 0;
+  box-shadow:0 3px 12px rgba(31,88,120,.04);
+}
+.product-title{
+  font-size:18px;
+  line-height:1.45;
+  font-weight:750;
+  color:#253746;
+  margin-bottom:10px;
+}
+.product-card > p{
+  margin:12px 0;
+  line-height:1.75;
+}
+.product-card > details{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid #e8f0f4;
+}
+.product-card > details summary{
+  font-weight:700;
+  color:var(--blue-dark);
+  cursor:pointer;
+  list-style:none;
+}
+.product-card > details summary::-webkit-details-marker{display:none;}
+.product-card > details summary::after{
+  content:"+";
+  float:right;
+  font-size:22px;
+  line-height:1;
+}
+.product-card > details[open] summary::after{content:"−";}
+.detail-body{
+  padding-top:10px;
+  color:#60717e;
+}
+.product-card + .product-card{margin-top:16px;}
+.price-box{
+  clear:both;
+  margin-top:22px;
+}
+.alternative details > summary{
+  font-weight:750;
+}
+.plan-line{
+  padding:11px 0;
+  border-bottom:1px solid #edf2f5;
+}
+.plan-line:last-child{border-bottom:0;}
+.plan-note{
+  margin-top:12px;
+  padding:12px 14px;
+  background:#f5fbff;
+  border-radius:12px;
+  color:#60717e;
+  line-height:1.7;
+}
+
+
+/* ===== V8 checkbox interaction ===== */
+.checkbox-option{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  cursor:pointer;
+  user-select:none;
+}
+.checkbox-option input{
+  width:20px;
+  height:20px;
+  min-width:20px;
+  margin:2px 0 0;
+  accent-color:#2f91c9;
+  cursor:pointer;
+}
+.checkbox-option.checked{
+  border-color:#59aedd;
+  background:#eef8fe;
+  color:#176a9a;
+  font-weight:650;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home">
+
+<div class="card">
+  <div class="brand">艾多美女士护肤选品助手</div>
+
+  <h1>不知道该怎么搭护肤品？</h1>
+
+  <p>
+    告诉我们你的皮肤状态、护理需求和预算，
+    帮你从不同系列里搭出一套更适合自己的日常护肤方案。
+  </p>
+
+  <span class="tag">按需求搭配</span>
+  <span class="tag">可以跨系列</span>
+  <span class="tag">考虑你的预算</span>
+  <span class="tag">告诉你怎么用</span>
+</div>
+
+
+<div class="card">
+
+  <h2>先认识一下你</h2>
+
+  <p>怎么称呼你？</p>
+
+  <input
+    type="text"
+    id="customerName"
+    placeholder="例如：王女士"
+  >
+
+  <p>为你提供本次选品服务的是：</p>
+
+  <input
+    type="text"
+    id="advisorName"
+    placeholder="例如：小艾Cally"
+  >
+
+  <div id="advisorLocked" style="display:none; margin-top:10px; padding:14px 16px; background:#eef8ff; border:1px solid #b9dcf5; border-radius:12px; color:#17669a; font-weight:700;"></div>
+
+  <button class="primary" onclick="startQuiz()">
+    开始我的护肤测试
+  </button>
+
+  <p class="small">大约 1–2 分钟完成</p>
+
+</div>
+
+</section>
+
+
+<!-- QUIZ -->
+<section id="quiz">
+
+<div class="topbar">
+
+  <button class="back" onclick="previousQuestion()">
+    ← 上一步
+  </button>
+
+  <div class="progress-bg">
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div class="q-number" id="questionNumber">
+    1 / 8
+  </div>
+
+</div>
+
+
+<!-- Q1 -->
+<div class="question active" data-q="1">
+
+<div class="card">
+
+<h2>你的年龄范围是？</h2>
+
+<p class="small">
+年龄只作为辅助参考，不会因为年龄直接给你推荐某个系列。
+</p>
+
+<button class="option" data-key="age" data-value="18-24"
+onclick="choose('age','18-24',this)">18–24 岁</button>
+
+<button class="option" data-key="age" data-value="25-34"
+onclick="choose('age','25-34',this)">25–34 岁</button>
+
+<button class="option" data-key="age" data-value="35-44"
+onclick="choose('age','35-44',this)">35–44 岁</button>
+
+<button class="option" data-key="age" data-value="45-54"
+onclick="choose('age','45-54',this)">45–54 岁</button>
+
+<button class="option" data-key="age" data-value="55+"
+onclick="choose('age','55+',this)">55 岁以上</button>
+
+</div>
+</div>
+
+
+<!-- Q2 -->
+<div class="question" data-q="2">
+
+<div class="card">
+
+<h2>你现在最想改善什么？</h2>
+
+<p class="small">选目前最困扰你的一个。</p>
+
+<button class="option" data-key="concern" data-value="dry"
+onclick="choose('concern','dry',this)">
+💧 干燥、紧绷、容易缺水
+</button>
+
+<button class="option" data-key="concern" data-value="sensitive"
+onclick="choose('concern','sensitive',this)">
+🌿 泛红、不舒服、状态不稳定
+</button>
+
+<button class="option" data-key="concern" data-value="dull"
+onclick="choose('concern','dull',this)">
+✨ 暗沉、气色不好
+</button>
+
+<button class="option" data-key="concern" data-value="spot"
+onclick="choose('concern','spot',this)">
+☀️ 色沉、斑点
+</button>
+
+<button class="option" data-key="concern" data-value="aging"
+onclick="choose('concern','aging',this)">
+🌙 细纹、弹性下降
+</button>
+
+<button class="option" data-key="concern" data-value="basic"
+onclick="choose('concern','basic',this)">
+🙂 没什么明显问题，想做好日常保养
+</button>
+
+</div>
+</div>
+
+
+<!-- Q3 -->
+<div class="question" data-q="3">
+
+<div class="card">
+
+<h2>你的皮肤平时更接近哪一种？</h2>
+
+<button class="option" data-key="skin" data-value="dry"
+onclick="choose('skin','dry',this)">
+整体偏干，洗完容易紧
+</button>
+
+<button class="option" data-key="skin" data-value="normal"
+onclick="choose('skin','normal',this)">
+大部分时候比较正常
+</button>
+
+<button class="option" data-key="skin" data-value="combo"
+onclick="choose('skin','combo',this)">
+T区会油，但脸颊会干
+</button>
+
+<button class="option" data-key="skin" data-value="oily"
+onclick="choose('skin','oily',this)">
+比较容易出油
+</button>
+
+<button class="option" data-key="skin" data-value="sensitive"
+onclick="choose('skin','sensitive',this)">
+容易泛红、刺痒或不稳定
+</button>
+
+</div>
+</div>
+
+
+<!-- Q4 -->
+<div class="question" data-q="4">
+
+<div class="card">
+
+<h2>除了刚才的问题，你还比较在意什么？</h2>
+
+<button class="option" data-key="second" data-value="hydration"
+onclick="choose('second','hydration',this)">
+补水、滋润
+</button>
+
+<button class="option" data-key="second" data-value="bright"
+onclick="choose('second','bright',this)">
+暗沉、气色
+</button>
+
+<button class="option" data-key="second" data-value="spot"
+onclick="choose('second','spot',this)">
+局部色沉、斑点
+</button>
+
+<button class="option" data-key="second" data-value="eye"
+onclick="choose('second','eye',this)">
+眼周干纹、细纹
+</button>
+
+<button class="option" data-key="second" data-value="aging"
+onclick="choose('second','aging',this)">
+弹性、细纹
+</button>
+
+<button class="option" data-key="second" data-value="none"
+onclick="choose('second','none',this)">
+没有，先解决主要问题
+</button>
+
+</div>
+</div>
+
+
+<!-- Q5 -->
+<div class="question" data-q="5">
+
+<div class="card">
+
+<h2>哪些产品你已经有，而且暂时不想换？</h2>
+
+<p class="small">
+可以多选。已经有并且想继续用的步骤，我们不会重复推荐。
+</p>
+<label class="option checkbox-option">
+<input type="checkbox" value="toner" onchange="toggleOwned(this)">
+化妆水 / 爽肤水
+</label>
+
+<label class="option checkbox-option">
+<input type="checkbox" value="serum" onchange="toggleOwned(this)">
+精华
+</label>
+
+<label class="option checkbox-option">
+<input type="checkbox" value="eye" onchange="toggleOwned(this)">
+眼霜
+</label>
+
+<label class="option checkbox-option">
+<input type="checkbox" value="moisturizer" onchange="toggleOwned(this)">
+乳液 / 面霜
+</label>
+
+<label class="option checkbox-option">
+<input type="checkbox" value="unsure" onchange="toggleOwned(this)">
+有一些其他品牌的产品，但不知道要不要继续用
+</label>
+
+<label class="option checkbox-option">
+<input type="checkbox" value="none" onchange="toggleOwned(this)">
+基本没有，想重新搭一套
+</label>
+
+<button class="primary" onclick="confirmOwned()">
+继续
+</button>
+
+</div>
+</div>
+
+
+<!-- Q6 -->
+<div class="question" data-q="6">
+
+<div class="card">
+
+<h2>你现在的护肤习惯怎么样？</h2>
+
+<button class="option" data-key="habit" data-value="simple"
+onclick="choose('habit','simple',this)">
+很简单，平时只擦一两样
+</button>
+
+<button class="option" data-key="habit" data-value="normal"
+onclick="choose('habit','normal',this)">
+有水、精华、乳液或面霜
+</button>
+
+<button class="option" data-key="habit" data-value="full"
+onclick="choose('habit','full',this)">
+已经有比较完整的护肤习惯
+</button>
+
+</div>
+</div>
+
+
+<!-- Q7 -->
+<div class="question" data-q="7">
+
+<div class="card">
+
+<h2>你愿意每天用多少步骤？</h2>
+
+<button class="option" data-key="steps" data-value="simple"
+onclick="choose('steps','simple',this)">
+越简单越好
+</button>
+
+<button class="option" data-key="steps" data-value="normal"
+onclick="choose('steps','normal',this)">
+4–5步没问题
+</button>
+
+<button class="option" data-key="steps" data-value="full"
+onclick="choose('steps','full',this)">
+愿意做得完整一点
+</button>
+
+</div>
+</div>
+
+
+<!-- Q8 -->
+<div class="question" data-q="8">
+
+<div class="card">
+
+<h2>重新搭一套日常护肤，你希望整套预算大概是多少？</h2>
+
+<p class="small">
+这里指这次购买希望控制的总预算。主推荐不会为了凑产品偷偷超过这个金额。
+</p>
+
+<button class="option budget-option" data-budget="300" data-label="¥300以内" onclick="selectBudget(this)">
+¥300以内
+</button>
+
+<button class="option budget-option" data-budget="500" data-label="¥300–500" onclick="selectBudget(this)">
+¥300–500
+</button>
+
+<button class="option budget-option" data-budget="800" data-label="¥500–800" onclick="selectBudget(this)">
+¥500–800
+</button>
+
+<button class="option budget-option" data-budget="1200" data-label="¥800–1200" onclick="selectBudget(this)">
+¥800–1200
+</button>
+
+<button class="option budget-option" data-budget="3000" data-label="¥1200以上" onclick="selectBudget(this)">
+¥1200以上，希望搭得完整一点
+</button>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- RESULTS -->
+<section id="results">
+
+<div class="card">
+
+<div class="brand" id="customerTitle"></div>
+
+<h1 id="resultTitle"></h1>
+
+<p id="resultIntro"></p>
+
+<div class="profile-summary" id="profileSummary"></div>
+
+<div id="existingProductNote"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="plan-label">⭐ 更适合你的方案</div>
+
+<h2>这套先这样搭</h2>
+
+<div class="plan-main" id="mainPlan"></div>
+
+</div>
+
+<div class="card" id="bundleCard" style="display:none;">
+<h2>💰 更划算的买法</h2>
+<div class="notice" id="bundleAdvice"></div>
+</div>
+
+
+<div class="card">
+
+<h2>每天怎么用？</h2>
+
+<div class="daily-use" id="dailyUse"></div>
+
+</div>
+
+
+<div class="card">
+
+<h2>如果还想再加一件</h2>
+
+<div class="next-buy" id="nextBuy"></div>
+
+</div>
+
+
+<div class="card alternative">
+
+<h2>想换一种买法？</h2>
+
+<details>
+<summary>想简单一点</summary>
+<div class="detail-content" id="simplePlan"></div>
+</details>
+
+<details id="fullPlanWrap">
+<summary>想搭得更完整</summary>
+<div class="detail-content" id="fullPlan"></div>
+</details>
+
+</div>
+
+
+<div class="advisor">
+本次护肤方案由
+<strong id="advisorResult"></strong>
+为你整理
+</div>
+
+
+<button class="secondary" onclick="editAnswers()">
+← 返回修改答案
+</button>
+
+<button class="primary" onclick="restartQuiz()">
+重新测试
+</button>
+
+
+<div class="disclaimer">
+本工具为独立日常护肤选品辅助工具，并非艾多美官方皮肤诊断，
+也不用于诊断、预防或治疗皮肤疾病。
+</div>
+
+</section>
+
+</div>
+
+
+<script>
+const TOTAL=8;
+let current=1;
+let answers={owned:[]};
+let customerName="";
+let advisorName="";
+
+/* ================= PRODUCT DATA ================= */
+const PRODUCTS=[
+{id:"fame_toner",name:"菲颜水润化妆水",step:"toner",series:"fame",price:130,scores:{dry:10,hydration:10,basic:8,sensitive:6,dull:4,bright:4,spot:2,aging:3,eye:1},skin:{dry:9,normal:8,combo:7,oily:6,sensitive:7},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"基础补水型化妆水，适合把日常水分护理先做好。",use:"洁面后使用，再继续精华。",what:"菲颜水润系列的基础化妆水。",ingredients:"系列配方方向包括泛醇、5种玻尿酸、神经酰胺等保湿与屏障护理体系。",ingredientMeaning:"更适合缺水、紧绷或希望做好基础保湿的人。"},
+{id:"fame_serum",name:"菲颜水润精华液",step:"serum",series:"fame",price:138,scores:{dry:10,hydration:10,basic:7,sensitive:6,dull:4,bright:4,spot:2,aging:4,eye:2},skin:{dry:9,normal:8,combo:7,oily:6,sensitive:7},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"在基础补水上再加强一步，适合干燥、紧绷或想把保湿做扎实的人。",use:"化妆水后使用。",what:"菲颜水润系列的精华步骤。",ingredients:"系列以泛醇、玻尿酸、神经酰胺及润肤体系为主要方向。",ingredientMeaning:"当重点是基础补水保湿时，它比功能型精华更贴近需求。"},
+{id:"fame_lotion",name:"菲颜水润乳液",step:"moisturizer",series:"fame",price:130,scores:{basic:9,hydration:9,dry:6,sensitive:6,dull:3,bright:3,aging:3,spot:2,eye:1},skin:{dry:6,normal:9,combo:9,oily:8,sensitive:7},age:{"18-24":6,"25-34":6,"35-44":6,"45-54":5,"55+":4},simple:"相对轻盈的日常保湿收尾，混合皮或偏油皮通常更容易坚持。",use:"精华后使用。",what:"菲颜水润系列的乳液。",ingredients:"菲颜系列保湿与润肤体系。",ingredientMeaning:"适合希望保湿但不想把收尾做得太厚的人。"},
+{id:"fame_cream",name:"菲颜水润营养霜",step:"cream",series:"fame",price:130,scores:{dry:10,hydration:9,aging:5,basic:7,sensitive:5,dull:3,bright:3,spot:2,eye:1},skin:{dry:10,normal:6,combo:3,oily:1,sensitive:5},age:{"18-24":3,"25-34":4,"35-44":5,"45-54":6,"55+":7},simple:"偏滋润的保湿收尾，明显偏干、容易紧绷时更有意义。",use:"精华或乳液后使用。",what:"菲颜水润系列偏滋润的最后一步。",ingredients:"系列资料提到乳木果脂、角鲨烷、阿甘油，以及泛醇、玻尿酸和神经酰胺等方向。",ingredientMeaning:"偏干肤质除了补水，也常需要更好的润肤收尾。"},
+{id:"fame_eye",name:"菲颜水润眼霜",step:"eye",series:"fame",price:130,scores:{eye:9,dry:7,hydration:6,aging:4,basic:2,sensitive:3,dull:2,bright:2,spot:1},skin:{dry:7,normal:6,combo:6,oily:6,sensitive:5},age:{"18-24":2,"25-34":4,"35-44":5,"45-54":6,"55+":6},simple:"基础眼周保湿，只有明确在意眼周时才提高优先级。",use:"取少量轻轻点按眼周。",what:"菲颜系列的眼周护理。",ingredients:"以系列保湿与润肤体系为基础。",ingredientMeaning:"不会因为年龄自动加入，明确眼周需求才是关键。"},
+
+{id:"absolute_toner",name:"艾诗洛特臻颜化妆水",step:"toner",series:"absolute",price:242,scores:{aging:10,dull:6,bright:6,dry:5,hydration:5,spot:3,basic:2,sensitive:1,eye:2},skin:{dry:6,normal:7,combo:5,oily:4,sensitive:2},age:{"18-24":0,"25-34":2,"35-44":5,"45-54":7,"55+":8},simple:"更偏进阶护理；真正提高优先级的是弹性、细纹等需求，而不是年龄本身。",use:"洁面后使用。",what:"臻颜系列化妆水。",ingredients:"系列官方资料强调CellActive复合体系、绿茶精华水等护理方向。",ingredientMeaning:"有明确弹性、细纹需求时才更值得升级。"},
+{id:"absolute_ampoule",name:"艾诗洛特臻颜浓缩精华液",series:"absolute",step:"ampoule",type:"booster",price:290,
+scores:{dry:6,sensitive:0,dull:7,spot:3,aging:12,basic:2,hydration:6,bright:6,eye:3,none:0},
+skin:{dry:7,normal:6,combo:4,oily:3,sensitive:-8},
+age:{"18-24":0,"25-34":2,"35-44":6,"45-54":9,"55+":11},simple:-4,
+what:"臻颜系列的高浓度进阶强化护理，可作为基础精华之外的独立加强步骤。",
+ingredients:"官方资料强调 CellActive Almight Code 30%，并列有烟酰胺、腺苷等成分。",
+ingredientMeaning:"作为独立强化模块，可根据补水、暗沉气色、细纹弹性等需求跨系列搭配；明显不稳定时则优先简化护理。",
+use:"化妆水后、普通精华液前使用；取适量均匀涂抹面部与颈部，避开眼周。"},
+{id:"absolute_serum",name:"艾诗洛特臻颜精华液",step:"serum",series:"absolute",price:267,scores:{aging:10,dull:8,bright:8,dry:5,hydration:4,spot:4,basic:2,sensitive:1,eye:4},skin:{dry:7,normal:7,combo:6,oily:5,sensitive:2},age:{"18-24":0,"25-34":3,"35-44":6,"45-54":8,"55+":9},simple:"当重点从基础保湿转向弹性、细纹和整体状态时，精华是更有意义的升级步骤。",use:"化妆水后使用。",what:"臻颜系列的进阶精华。",ingredients:"CellActive相关体系及绿茶精华水等护理方向。",ingredientMeaning:"预算有限时，它会与其他步骤竞争优先级，不会默认整套升级。"},
+{id:"absolute_lotion",name:"艾诗洛特臻颜乳液",step:"moisturizer",series:"absolute",price:242,scores:{aging:9,dry:5,hydration:5,dull:5,bright:5,basic:2,sensitive:1,spot:3,eye:2},skin:{dry:6,normal:7,combo:6,oily:4,sensitive:2},age:{"18-24":0,"25-34":2,"35-44":6,"45-54":8,"55+":9},simple:"适合有进阶护理需求、又偏好乳液质地的人。",use:"精华后使用。",what:"臻颜系列乳液。",ingredients:"臻颜系列护理体系。",ingredientMeaning:"主要由进阶护理需求提高优先级，而不是年龄自动触发。"},
+{id:"absolute_eye",name:"艾诗洛特臻颜眼霜",step:"eye",series:"absolute",price:267,scores:{eye:10,aging:10,dry:4,sensitive:1,hydration:3,dull:4,bright:4,spot:2,basic:1},skin:{dry:7,normal:6,combo:5,oily:5,sensitive:2},age:{"18-24":0,"25-34":2,"35-44":6,"45-54":9,"55+":10},simple:"明确在意眼周细纹、弹性时才比基础眼周保湿更值得优先。",use:"取少量轻轻点按眼周。",what:"臻颜系列进阶眼周护理。",ingredients:"臻颜系列CellActive相关护理体系。",ingredientMeaning:"眼周需求比年龄更重要。"},
+{id:"absolute_cream",name:"艾诗洛特臻颜营养霜",step:"cream",series:"absolute",price:242,scores:{aging:10,dry:8,hydration:5,dull:5,bright:5,basic:2,sensitive:1,spot:3,eye:2},skin:{dry:9,normal:6,combo:3,oily:1,sensitive:2},age:{"18-24":0,"25-34":2,"35-44":6,"45-54":8,"55+":9},simple:"同时有明显滋润需求和进阶护理需求时更有意义。",use:"护理靠后作为滋润收尾。",what:"臻颜系列营养霜。",ingredients:"臻颜系列CellActive相关体系及滋润护理方向。",ingredientMeaning:"不是年龄大就自动选择，而是看干燥与进阶需求是否同时存在。"},
+
+{id:"soothing_toner",name:"舒缓修护柔肤水",step:"toner",series:"soothing",price:105,scores:{sensitive:13,dry:7,hydration:7,basic:6,dull:2,bright:2,spot:1,aging:2,eye:0},skin:{dry:8,normal:7,combo:7,oily:6,sensitive:13},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"当泛红、不舒服或状态反复是当前重点时，柔肤水优先走舒缓修护路线。",use:"洁面后使用。",what:"舒缓修护系列的柔肤水。",ingredients:"当前按舒缓修护系列定位参与匹配，具体成分说明以后可继续补充官方资料。",ingredientMeaning:"皮肤不稳定时，优先级来自当前状态，而不是年龄。"},
+{id:"soothing_serum",name:"舒缓修护浓缩精华液",step:"serum",series:"soothing",price:199,scores:{sensitive:14,dry:7,hydration:7,basic:5,dull:2,bright:2,spot:1,aging:2,eye:0},skin:{dry:8,normal:7,combo:7,oily:6,sensitive:14},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"敏感、不稳定状态下，把精华预算优先放在舒缓修护路线，而不是先叠加淡斑或抗老。",use:"柔肤水后使用。",what:"舒缓修护系列的浓缩精华。",ingredients:"当前按舒缓修护系列定位参与匹配，具体成分说明以后可继续补充官方资料。",ingredientMeaning:"第一需求是稳定状态时，它比功能型精华更贴近当前重点。"},
+{id:"soothing_cream",name:"舒缓修护营养霜",step:"cream",series:"soothing",price:140,scores:{sensitive:14,dry:8,hydration:7,basic:5,dull:2,bright:2,aging:2,spot:1,eye:0},skin:{dry:9,normal:7,combo:6,oily:4,sensitive:14},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"泛红、不稳定同时需要保湿收尾时，比单纯增加滋润度更贴合当前重点。",use:"护理靠后作为保湿收尾。",what:"舒缓修护路线的营养霜。",ingredients:"当前按舒缓修护系列定位参与匹配，具体成分说明以后可继续补充官方资料。",ingredientMeaning:"状态不稳定时先把舒缓和基础保湿做好。"},
+{id:"soothing_mist",name:"舒缓喷雾",step:"extra",series:"soothing",type:"extra",price:76,scores:{sensitive:10,dry:5,hydration:6,basic:3,dull:1,bright:1,aging:1,spot:0,eye:0},skin:{dry:6,normal:5,combo:5,oily:5,sensitive:10},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"属于辅助舒缓护理，不替代水、精华或面霜。",use:"作为辅助护理按产品说明使用。",what:"辅助型舒缓喷雾。",ingredients:"具体成分说明后续按官方完整资料补充。",ingredientMeaning:"高度相关时可以增加，但不是为了凑预算。"},
+{id:"moisture_mist",name:"润肤喷雾",step:"extra",series:"other",type:"extra",price:86,scores:{dry:8,hydration:9,sensitive:4,basic:4,dull:1,bright:1,aging:1,spot:0,eye:0},skin:{dry:8,normal:6,combo:5,oily:4,sensitive:5},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"偏日常润肤和补充护理，基础保湿已经够时不需要为了预算再加。",use:"作为辅助护理使用。",what:"日常辅助型润肤喷雾。",ingredients:"具体成分说明后续按官方完整资料补充。",ingredientMeaning:"适合明显偏干且希望增加方便辅助护理的人。"},
+
+{id:"snow_toner",name:"艾诗洛特雪颜柔肤水",step:"toner",series:"snow",price:145,scores:{spot:9,dull:9,bright:10,aging:2,dry:3,hydration:4,basic:2,sensitive:-3,eye:0},skin:{dry:5,normal:8,combo:8,oily:7,sensitive:-2},age:{"18-24":3,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"当色沉、斑点或提亮是明确目标时，它才会比基础补水型化妆水更优先。",use:"洁面后使用。",what:"雪颜系列柔肤水。",ingredients:"当前按雪颜系列的肤色与色沉护理定位参与匹配。",ingredientMeaning:"皮肤稳定且明确在意肤色问题时提高优先级。"},
+{id:"snow_serum",name:"艾诗洛特雪颜精华液",step:"serum",series:"snow",price:155,scores:{spot:10,dull:10,bright:10,aging:2,dry:2,hydration:3,basic:1,sensitive:-4,eye:0},skin:{dry:5,normal:8,combo:8,oily:7,sensitive:-3},age:{"18-24":3,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"适合皮肤状态稳定、并把色沉或暗沉作为明确目标的人。",use:"柔肤水后使用。",what:"雪颜系列精华。",ingredients:"当前按雪颜系列的肤色与色沉护理定位参与匹配。",ingredientMeaning:"功能需求明确时优先，不会因为预算高就自动加入。"},
+{id:"dark_spot",name:"艾诗洛特雪颜斑点修护乳",step:"target",series:"snow",price:120,scores:{spot:12,dull:8,bright:8,aging:2,dry:1,hydration:1,basic:1,sensitive:-6,eye:0},skin:{dry:5,normal:7,combo:7,oily:7,sensitive:-5},age:{"18-24":2,"25-34":4,"35-44":5,"45-54":5,"55+":5},simple:"不是普通面霜，而是针对局部色沉、斑点外观的重点护理。",use:"用于需要重点护理的局部区域；白天注意做好日常防晒。",what:"雪颜系列局部针对性护理。",ingredients:"已知配方方向包括烟酰胺、传明酸、维生素C衍生物、α-没药醇、甘草根相关成分等。",ingredientMeaning:"皮肤不稳定时会延后，而不是因为有斑点就强行加入。"},
+{id:"snow_day",name:"艾诗洛特雪颜日霜",step:"daycream",series:"snow",price:170,scores:{spot:8,dull:8,bright:9,aging:2,dry:4,hydration:4,basic:2,sensitive:-3,eye:0},skin:{dry:6,normal:8,combo:7,oily:6,sensitive:-2},age:{"18-24":3,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"雪颜路线的日间面霜，适合稳定状态下把肤色护理延伸到保湿收尾。",use:"白天护理靠后使用。",what:"雪颜系列日霜。",ingredients:"当前按雪颜系列产品定位参与匹配。",ingredientMeaning:"只有当雪颜路线与当前需求高度相关时才加入。"},
+{id:"snow_night",name:"艾诗洛特雪颜晚霜",step:"nightcream",series:"snow",price:189,scores:{spot:9,dull:8,bright:9,aging:2,dry:6,hydration:5,basic:2,sensitive:-3,eye:0},skin:{dry:8,normal:8,combo:6,oily:4,sensitive:-2},age:{"18-24":3,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"雪颜路线的晚间收尾，偏干且明确在意色沉时更有意义。",use:"晚间护理靠后使用。",what:"雪颜系列晚霜。",ingredients:"当前按雪颜系列产品定位参与匹配。",ingredientMeaning:"更适合稳定状态下兼顾色沉目标与晚间滋润的人。"},
+
+{id:"bright_care_set",name:"艾多美润亮护理2件套",step:"care_set",series:"bright",type:"care_set",price:238,scores:{dull:12,bright:12,spot:4,dry:8,hydration:10,basic:5,sensitive:0,aging:2,eye:0},skin:{dry:6,normal:8,combo:7,oily:6,sensitive:1},age:{"18-24":5,"25-34":5,"35-44":5,"45-54":5,"55+":5},simple:"这套本身就是精华130ml + 营养霜60ml的组合销售，不拆成两个虚构单品价格。",use:"按套装内精华与营养霜的产品说明分步骤使用。",what:"润亮护理精华液与营养霜的2件组合。",ingredients:"当前按润亮护理系列定位参与匹配。",ingredientMeaning:"皮肤状态稳定，并且明确在意暗沉、气色或补水保湿时，它可以作为一条完整的购买路线。"}
+];
+
+const BUNDLES=[
+{id:"fame_5_set",name:"菲颜水润5件套",price:620,products:["fame_toner","fame_serum","fame_lotion","fame_cream","fame_eye"],eligible:true},
+{id:"soothing_set",name:"舒缓护理套装",price:426,products:["soothing_toner","soothing_serum","soothing_cream"],eligible:true},
+{id:"snow_5_set",name:"艾诗洛特雪颜系列5件套",price:853.49,products:["snow_toner","snow_serum","dark_spot","snow_day","snow_night"],eligible:true},
+{id:"absolute_set",name:"艾诗洛特臻颜套装",price:1450,products:["absolute_toner","absolute_ampoule","absolute_serum","absolute_lotion","absolute_eye","absolute_cream"],eligible:true}
+];
+
+/* ================= QUIZ ================= */
+function startQuiz(){customerName=document.getElementById("customerName").value.trim()||"你";advisorName=document.getElementById("advisorName").value.trim()||"小艾Cally";document.getElementById("home").style.display="none";document.getElementById("quiz").style.display="block";current=1;showQuestion();}
+function choose(key,value,button){answers[key]=value;button.closest(".question").querySelectorAll(".option").forEach(b=>b.classList.remove("selected"));button.classList.add("selected");setTimeout(()=>{if(current<TOTAL){current++;showQuestion();}},150);}
+function previousQuestion(){if(current===1){document.getElementById("quiz").style.display="none";document.getElementById("home").style.display="block";return;}current--;showQuestion();}
+function showQuestion(){document.querySelectorAll(".question").forEach(q=>q.classList.remove("active"));const active=document.querySelector('.question[data-q="'+current+'"]');if(active)active.classList.add("active");restoreSelections();document.getElementById("questionNumber").innerText=current+" / "+TOTAL;document.getElementById("progress").style.width=((current-1)/TOTAL*100)+"%";}
+function syncOwnedVisuals(){
+  document.querySelectorAll('.question[data-q="5"] .checkbox-option').forEach(label=>{
+    const input=label.querySelector('input[type="checkbox"]');
+    label.classList.toggle("checked",!!input?.checked);
+  });
+}
+function restoreSelections(){
+  const active=document.querySelector('.question[data-q="'+current+'"]');
+  if(!active)return;
+  active.querySelectorAll("[data-key][data-value]").forEach(button=>
+    button.classList.toggle("selected",answers[button.dataset.key]===button.dataset.value)
+  );
+  if(current===5){
+    active.querySelectorAll('input[type="checkbox"]').forEach(input=>{
+      input.checked=answers.owned.includes(input.value);
+    });
+    syncOwnedVisuals();
+  }
+}
+function toggleOwned(input){
+  const value=input.value;
+  const boxes=[...document.querySelectorAll('.question[data-q="5"] input[type="checkbox"]')];
+
+  if((value==="none"||value==="unsure")&&input.checked){
+    boxes.forEach(x=>x.checked=(x===input));
+  }else if(input.checked){
+    /* 具体产品一旦被选择，就取消“基本没有 / 不确定” */
+    boxes.forEach(x=>{
+      if(x.value==="none"||x.value==="unsure")x.checked=false;
+    });
+  }
+
+  answers.owned=boxes.filter(x=>x.checked).map(x=>x.value);
+  syncOwnedVisuals();
+}
+function confirmOwned(){if(!answers.owned.length)answers.owned=["none"];current++;showQuestion();}
+function selectBudget(button){
+  const budget=Number(button.dataset.budget);
+  const label=button.dataset.label;
+
+  document.querySelectorAll('.question[data-q="8"] .budget-option').forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+
+  answers.budget=budget;
+  answers.budgetLabel=label;
+
+  /* 先切换页面，再生成结果。这样即使某个结果模块报错，按钮也不会看起来“完全没反应”。 */
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("results").style.display="block";
+  window.scrollTo(0,0);
+
+  try{
+    buildResults();
+  }catch(err){
+    console.error("Result build error:",err);
+    document.getElementById("results").style.display="none";
+    document.getElementById("quiz").style.display="block";
+    current=8;
+    showQuestion();
+    alert("结果生成时出现显示错误，请重新点击预算选项。");
+  }
+}
+function finishQuiz(budget,label){
+  answers.budget=budget;
+  answers.budgetLabel=label;
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("results").style.display="block";
+  window.scrollTo(0,0);
+  buildResults();
+}
+function alreadyOwn(step){if(answers.owned.includes("none")||answers.owned.includes("unsure"))return false;if(["moisturizer","cream","daycream","nightcream"].includes(step))return answers.owned.includes("moisturizer");return answers.owned.includes(step);}
+function isSensitiveState(){return answers.concern==="sensitive"||answers.skin==="sensitive";}
+
+/* ================= MATCHING ================= */
+/* ================= ROLE-BASED MATCHING V6 =================
+   先判断客户需要什么护理角色，再让不同系列的产品竞争。
+   年龄只做辅助，不单独决定系列。
+============================================================= */
+function wantedRoles(){
+  const w={hydrate:0,soothe:0,barrier:0,balance:0,brighten:0,spot:0,firm:0,eye:0,booster:0};
+
+  if(answers.concern==="dry"){w.hydrate+=10;w.barrier+=8;}
+  if(answers.concern==="sensitive"){w.soothe+=12;w.barrier+=9;}
+  if(answers.concern==="dull"){w.brighten+=11;w.hydrate+=3;}
+  if(answers.concern==="spot"){w.spot+=12;w.brighten+=7;}
+  if(answers.concern==="aging"){w.firm+=12;w.booster+=8;}
+  if(answers.concern==="basic"){w.hydrate+=5;w.balance+=5;}
+
+  if(answers.second==="hydration"){w.hydrate+=7;w.barrier+=3;}
+  if(answers.second==="bright"){w.brighten+=8;}
+  if(answers.second==="spot"){w.spot+=8;w.brighten+=4;}
+  if(answers.second==="eye"){w.eye+=10;w.firm+=3;}
+  if(answers.second==="aging"){w.firm+=9;w.booster+=6;}
+
+  if(answers.skin==="dry"){w.hydrate+=5;w.barrier+=5;}
+  if(answers.skin==="oily"||answers.skin==="combo")w.balance+=5;
+  if(answers.skin==="sensitive"){w.soothe+=6;w.barrier+=5;}
+
+  return w;
+}
+
+const ROLE_MAP={
+  fame_toner:{hydrate:8,soothe:5,balance:4,barrier:3},
+  fame_serum:{hydrate:8,barrier:5,balance:3},
+  fame_lotion:{hydrate:6,balance:8,barrier:4},
+  fame_cream:{hydrate:8,barrier:8,brighten:2},
+  fame_eye:{eye:7,firm:4,hydrate:4},
+
+  absolute_toner:{hydrate:5,firm:5,booster:3},
+  absolute_ampoule:{hydrate:6,firm:9,brighten:6,booster:10},
+  absolute_serum:{firm:10,hydrate:4,booster:5},
+  absolute_lotion:{hydrate:5,firm:6,balance:4},
+  absolute_eye:{eye:10,firm:8,hydrate:4},
+  absolute_cream:{hydrate:7,firm:7,barrier:5},
+
+  soothing_toner:{soothe:10,hydrate:6,barrier:5},
+  soothing_serum:{soothe:11,barrier:8,hydrate:6},
+  soothing_cream:{soothe:9,barrier:10,hydrate:8},
+  soothing_mist:{soothe:7,hydrate:5},
+
+  bright_care_set:{brighten:9,hydrate:8,balance:3},
+
+  snow_toner:{brighten:8,balance:4},
+  snow_serum:{brighten:10,hydrate:4},
+  dark_spot:{spot:12,brighten:8},
+  snow_day:{hydrate:8,brighten:5},
+  snow_night:{firm:7,hydrate:7,brighten:6}
+};
+
+function roleFit(p){
+  const want=wantedRoles();
+  const have=ROLE_MAP[p.id]||{};
+  let score=0;
+  for(const k of Object.keys(want)) score+=(want[k]||0)*(have[k]||0);
+
+  /* 年龄只在已经存在进阶需求时轻度辅助 */
+  if((want.firm>=8||want.eye>=8) && p.series==="absolute"){
+    if(answers.age==="55+")score+=35;
+    else if(answers.age==="45-54")score+=25;
+    else if(answers.age==="35-44")score+=12;
+  }
+
+  /* 明显不稳定状态优先简化；普通敏感肤质不是永久封锁 */
+  if(isSensitiveState()){
+    if(p.series==="soothing")score+=80;
+    if(p.type==="booster"||p.series==="snow"||p.series==="absolute")score-=100;
+  }
+
+  /* 浓缩精华是广义 booster：补水、暗沉、紧致均可参与 */
+  if(p.id==="absolute_ampoule"&&!isSensitiveState()){
+    const useful=
+      want.firm>=8 ||
+      want.brighten>=8 ||
+      want.hydrate>=10 ||
+      want.booster>=6;
+    if(useful)score+=55;
+    if(answers.steps==="simple")score-=60;
+  }
+
+  return score;
+}
+
+function scoreProduct(p){
+  let s=
+    roleFit(p)*0.12 +
+    (p.scores[answers.concern]||0)*1.6 +
+    (p.scores[answers.second]||0)*0.9 +
+    (p.skin[answers.skin]||0)*0.8 +
+    (p.age[answers.age]||0)*0.18;
+
+  const advancedNeed =
+    answers.concern==="aging" ||
+    answers.second==="aging" ||
+    answers.concern==="spot" ||
+    answers.second==="spot" ||
+    answers.second==="eye";
+
+  /* 敏感 / 不稳定：功能型路线明显降权 */
+  if(isSensitiveState()&&(p.series==="snow"||p.series==="absolute"||p.type==="care_set")){
+    s-=40;
+  }
+
+  /* 年龄不能单独决定臻颜，但“年龄 + 明确细纹/弹性”会共同加强臻颜 */
+  if(
+    p.series==="absolute" &&
+    (answers.concern==="aging"||answers.second==="aging")
+  ){
+    if(answers.age==="55+") s+=18;
+    else if(answers.age==="45-54") s+=12;
+    else if(answers.age==="35-44") s+=6;
+  }
+
+  /* 润亮：暗沉/气色是强触发；只有补水时不能压过明确的进阶需求 */
+  if(p.id==="bright_care_set"){
+    const brightNeed =
+      answers.concern==="dull" ||
+      answers.second==="bright";
+
+    const hydrationOnlyNeed =
+      answers.concern==="dry" ||
+      answers.second==="hydration";
+
+    if(brightNeed) s+=18;
+
+    if(hydrationOnlyNeed && !brightNeed){
+      s+=5;
+      if(advancedNeed) s-=32;
+      if(answers.age==="55+") s-=18;
+      else if(answers.age==="45-54") s-=8;
+    }
+  }
+
+  if(answers.skin==="oily"&&["cream","nightcream"].includes(p.step)) s-=16;
+  if(answers.skin==="dry"&&["cream","nightcream"].includes(p.step)) s+=9;
+  if(answers.second==="eye"&&p.step==="eye") s+=16;
+  if((answers.concern==="spot"||answers.second==="spot")&&p.step==="target") s+=20;
+
+  if(p.id==="absolute_ampoule"){
+    if(!isSensitiveState()&&(answers.concern==="aging"||answers.second==="aging")){
+      s+=24;
+      if(answers.age==="55+") s+=10;
+      else if(answers.age==="45-54") s+=7;
+      else if(answers.age==="35-44") s+=4;
+    }
+    if(answers.steps==="simple") s-=22;
+  }
+  return s;
+}
+function best(step,series=null){if(alreadyOwn(step))return null;return PRODUCTS.filter(p=>p.step===step&&(!series||p.series===series)).sort((a,b)=>scoreProduct(b)-scoreProduct(a))[0]||null;}
+function bestAvailable(step,series=null){
+  return PRODUCTS
+    .filter(p=>p.step===step&&(!series||p.series===series))
+    .sort((a,b)=>scoreProduct(b)-scoreProduct(a))[0]||null;
+}
+function unique(list){return list.filter((p,i,a)=>p&&a.findIndex(x=>x.id===p.id)===i);}
+function totalPrice(list){return Math.round(list.reduce((s,p)=>s+(p.price||0),0)*100)/100;}
+function priority(p){
+  let x=scoreProduct(p)*.35;
+  if(["cream","moisturizer","daycream","nightcream"].includes(p.step))x+=30;
+  if(p.step==="serum")x+=25;
+  if(p.step==="toner")x+=17;
+  if(p.step==="ampoule"){
+    if(!isSensitiveState()&&(answers.concern==="aging"||answers.second==="aging"))x+=34;
+    if(answers.steps==="simple")x-=30;
+    if(isSensitiveState())x-=50;
+  }
+  if(p.step==="target"&&answers.concern==="spot")x+=35;
+  if(p.step==="eye"&&answers.second==="eye")x+=25;
+  if(p.type==="extra")x-=18;
+  return x;
+}
+function fitBudget(list){let sorted=unique((list||[]).filter(Boolean)).sort((a,b)=>priority(b)-priority(a)),out=[],sum=0;for(const p of sorted){if(sum+p.price<=answers.budget){out.push(p);sum+=p.price;}}return out;}
+
+function buildMainPlan(){
+  let c=[];
+
+  /* ===============================
+     1. 敏感 / 不稳定：先收稳
+  =============================== */
+  if(isSensitiveState()){
+    if(!alreadyOwn("toner")) c.push(best("toner","soothing"));
+    if(!alreadyOwn("serum")) c.push(best("serum","soothing"));
+    if(!alreadyOwn("moisturizer")) c.push(best("cream","soothing"));
+
+    if(
+      answers.steps!=="simple" &&
+      answers.budget>=500
+    ){
+      c.push(PRODUCTS.find(p=>p.id==="soothing_mist"));
+    }
+
+    return fitBudget(c);
+  }
+
+  const hasAgingNeed =
+    answers.concern==="aging" ||
+    answers.second==="aging";
+
+  const hasSpotNeed =
+    answers.concern==="spot" ||
+    answers.second==="spot";
+
+  const hasEyeNeed =
+    answers.second==="eye";
+
+  const hasAdvancedNeed =
+    hasAgingNeed || hasSpotNeed || hasEyeNeed;
+
+  const hasBrightNeed =
+    answers.concern==="dull" ||
+    answers.second==="bright";
+
+  const hasHydrationNeed =
+    answers.concern==="dry" ||
+    answers.second==="hydration";
+
+  const brightHasPurchaseSpace =
+    !alreadyOwn("serum") &&
+    !alreadyOwn("moisturizer");
+
+  /*
+    润亮：
+    - 暗沉/气色 = 强触发
+    - 只有补水 = 可以参与，但不能覆盖明确抗老/斑点/眼周需求
+    - 55+ 只有补水时，不把润亮作为主路线
+  */
+  const brightEligible =
+    !isSensitiveState() &&
+    brightHasPurchaseSpace &&
+    answers.budget>=238 &&
+    (
+      hasBrightNeed ||
+      (
+        hasHydrationNeed &&
+        !hasAdvancedNeed &&
+        answers.age!=="55+"
+      )
+    );
+
+  /* ===============================
+     2. 先建立基础骨架
+  =============================== */
+  if(!alreadyOwn("toner")){
+    c.push(best("toner"));
+  }
+
+  if(brightEligible && hasBrightNeed){
+    /* 明确暗沉/气色：润亮可以直接成为核心组合 */
+    c.push(PRODUCTS.find(p=>p.id==="bright_care_set"));
+  }else{
+    /* 精华必须回应主要/第二功能需求 */
+    if(!alreadyOwn("serum")){
+      if(hasAgingNeed){
+        c.push(best("serum","absolute"));
+      }else if(hasSpotNeed){
+        c.push(best("serum","snow"));
+      }else{
+        c.push(best("serum"));
+      }
+    }
+
+    /* 保湿收尾 */
+    if(!alreadyOwn("moisturizer")){
+      if(answers.skin==="dry"){
+        /*
+          偏干 + 预算充足 + 愿意正常/完整护理：
+          可以合理形成乳液 + 面霜，而不是只保留最低限度。
+        */
+        if(
+          answers.steps!=="simple" &&
+          answers.budget>=800
+        ){
+          if(hasAgingNeed){
+            c.push(best("moisturizer","absolute"));
+            c.push(best("cream","absolute"));
+          }else{
+            c.push(best("moisturizer"));
+            c.push(best("cream"));
+          }
+        }else{
+          if(hasAgingNeed){
+            c.push(best("cream","absolute"));
+          }else{
+            c.push(best("cream"));
+          }
+        }
+      }else{
+        if(hasAgingNeed){
+          c.push(best("moisturizer","absolute"));
+        }else{
+          c.push(best("moisturizer"));
+        }
+      }
+    }
+
+    /*
+      只有补水、没有明确进阶需求时，润亮才作为高性价比路线参与。
+      这里避免和已经选出的精华+面霜重复，所以不强塞。
+    */
+    if(
+      brightEligible &&
+      hasHydrationNeed &&
+      !hasAdvancedNeed &&
+      c.filter(p=>p&&["serum","cream","moisturizer"].includes(p.step)).length<2
+    ){
+      c.push(PRODUCTS.find(p=>p.id==="bright_care_set"));
+    }
+  }
+
+  /* ===============================
+     2.5 臻颜浓缩精华：独立 Booster 槽
+     不占普通精华位置，也不会因为客户已有普通精华就自动排除。
+  =============================== */
+  const ampoule=PRODUCTS.find(p=>p.id==="absolute_ampoule");
+  const ampouleUseful=
+    hasAgingNeed ||
+    hasBrightNeed ||
+    hasHydrationNeed;
+
+  const ampouleEligible=
+    ampoule &&
+    !isSensitiveState() &&
+    ampouleUseful &&
+    answers.steps!=="simple" &&
+    (
+      answers.budgetLabel==="¥1200以上" ||
+      answers.budget>=800
+    );
+
+  if(ampouleEligible) c.push(ampoule);
+
+  /* ===============================
+     3. 第二需求必须得到回应
+  =============================== */
+  if(hasSpotNeed){
+    c.push(best("target"));
+  }
+
+  if(hasEyeNeed){
+    c.push(best("eye"));
+  }
+
+  /* 只有“抗老”不等于自动加眼霜；明确眼周需求才加 */
+  if(
+    answers.concern==="spot" &&
+    answers.steps==="full"
+  ){
+    if(answers.skin==="dry") c.push(best("nightcream","snow"));
+    else c.push(best("daycream","snow"));
+  }
+
+  c=unique(c.filter(Boolean));
+
+  /* 简单型用户仍控制在最多3件 */
+  if(answers.steps==="simple"){
+    c=c.sort((a,b)=>priority(b)-priority(a)).slice(0,3);
+  }
+
+  /*
+    高预算不是强行花满，但在需求明确且愿意使用时，
+    不再因为“最低限度已经够了”而过早停止。
+  */
+  return fitBudget(c);
+}
+function buildSimplePlan(main){return [...main].sort((a,b)=>priority(b)-priority(a)).slice(0,Math.min(main.length,answers.concern==="spot"?3:2));}
+function buildFullPlan(main){
+  if(isSensitiveState()){
+    return {products:[...main],mode:"sensitive",changed:false};
+  }
+
+  let c=[...main].filter(Boolean);
+
+  const hasAging=answers.concern==="aging"||answers.second==="aging";
+  const hasBright=answers.concern==="dull"||answers.second==="bright";
+  const hasSpot=answers.concern==="spot"||answers.second==="spot";
+  const hasEye=answers.second==="eye";
+
+  const pushIf=p=>{if(p)c.push(p);};
+
+  /*
+    完整方案可以提供“以后替换现有产品”的路线，
+    因此这里不能继续调用会被 alreadyOwn() 拦截的 best()。
+  */
+  if(alreadyOwn("toner")) pushIf(bestAvailable("toner"));
+
+  if(alreadyOwn("serum")){
+    pushIf(hasAging?bestAvailable("serum","absolute"):bestAvailable("serum"));
+  }
+
+  if(alreadyOwn("moisturizer")){
+    if(answers.skin==="dry"){
+      pushIf(hasAging?bestAvailable("cream","absolute"):bestAvailable("cream"));
+    }else{
+      pushIf(hasAging?bestAvailable("moisturizer","absolute"):bestAvailable("moisturizer"));
+    }
+  }
+
+  /* 缺失基础步骤 */
+  if(!c.some(p=>p&&p.step==="toner")) pushIf(bestAvailable("toner"));
+
+  if(
+    !c.some(p=>p&&p.step==="serum") &&
+    !c.some(p=>p&&p.type==="care_set")
+  ){
+    pushIf(hasAging?bestAvailable("serum","absolute"):bestAvailable("serum"));
+  }
+
+  if(
+    !c.some(p=>p&&["moisturizer","cream","daycream","nightcream"].includes(p.step)) &&
+    !c.some(p=>p&&p.type==="care_set")
+  ){
+    if(answers.skin==="dry") pushIf(hasAging?bestAvailable("cream","absolute"):bestAvailable("cream"));
+    else pushIf(hasAging?bestAvailable("moisturizer","absolute"):bestAvailable("moisturizer"));
+  }
+
+  /* Booster：完整方案中按需求加入，不与普通精华互斥 */
+  if(
+    answers.steps!=="simple" &&
+    (hasAging||hasBright||answers.concern==="dry"||answers.second==="hydration") &&
+    !c.some(p=>p&&p.id==="absolute_ampoule")
+  ){
+    pushIf(PRODUCTS.find(p=>p.id==="absolute_ampoule"));
+  }
+
+  if(hasEye&&!c.some(p=>p&&p.step==="eye")) pushIf(bestAvailable("eye"));
+  if(hasSpot&&!c.some(p=>p&&p.step==="target")) pushIf(bestAvailable("target"));
+
+  if(answers.skin==="dry"&&answers.steps==="full"){
+    if(!c.some(p=>p&&p.step==="moisturizer"))
+      pushIf(hasAging?bestAvailable("moisturizer","absolute"):bestAvailable("moisturizer"));
+    if(!c.some(p=>p&&p.step==="cream"))
+      pushIf(hasAging?bestAvailable("cream","absolute"):bestAvailable("cream"));
+  }
+
+  c=unique(c.filter(Boolean));
+
+  const mainIds=new Set(main.filter(Boolean).map(p=>p.id));
+  const changed=c.some(p=>!mainIds.has(p.id));
+
+  return {products:c,mode:"normal",changed};
+}
+/* ================= PERSONALIZATION ================= */
+function personalReason(p){
+  let r=[];
+
+  if(p.series==="soothing"&&isSensitiveState()){
+    if(p.step==="toner") r.push("你当前最需要先把护理方向收稳，所以洁面后的第一步优先走舒缓修护路线。");
+    else if(p.step==="serum") r.push("你当前第一优先级是稳定状态，因此精华预算先放在舒缓修护，而不是功能型精华。");
+    else if(p.step==="cream") r.push("你当前状态不稳定，同时需要保湿收尾，所以这里优先选择舒缓修护营养霜。");
+    else if(p.type==="extra") r.push("它只作为额外辅助舒缓，不是必须完成的核心步骤。");
+  }
+
+  if(
+    answers.skin==="dry" &&
+    ["cream","nightcream"].includes(p.step) &&
+    p.series!=="soothing"
+  ){
+    r.push("你本身偏干，所以保湿收尾需要比轻薄肤质更扎实。");
+  }
+
+  if(
+    (answers.skin==="oily"||answers.skin==="combo") &&
+    p.step==="moisturizer"
+  ){
+    r.push("你的肤质更适合先用相对轻一些的乳液收尾，不需要为了完整硬叠面霜。");
+  }
+
+  if(
+    (answers.concern==="aging"||answers.second==="aging") &&
+    p.series==="absolute" &&
+    p.id!=="absolute_ampoule"
+  ){
+    if(p.step==="serum") r.push("你明确提到细纹或弹性，所以普通臻颜精华在日常精华步骤里的优先级提高。");
+    else if(p.step==="eye") r.push("这一步主要负责眼周护理；只有眼周需求或完整进阶护理足够明确时才提高优先级。");
+    else if(p.step==="cream") r.push("你同时需要保湿收尾和进阶护理，因此这里让臻颜营养霜参与竞争。");
+    else if(p.step==="moisturizer") r.push("你愿意接受较完整的护理，同时有进阶需求，因此乳液可以作为保湿与完整度之间的衔接步骤。");
+  }
+
+  if(answers.concern==="spot"&&p.step==="target"){
+    r.push("局部色沉、斑点是你的主要需求，因此针对性护理会提高优先级。");
+  }
+
+  if(answers.second==="eye"&&p.step==="eye"){
+    r.push("你明确提到眼周干纹或细纹，所以眼霜才进入方案，并不是因为年龄自动添加。");
+  }
+
+  if(p.type==="care_set"){
+    if(answers.concern==="dull"||answers.second==="bright"){
+      r.push("你明确在意暗沉或气色，而且皮肤目前稳定，这套精华＋营养霜可以作为核心护理组合。");
+    }else if(
+      (answers.concern==="dry"||answers.second==="hydration") &&
+      !(answers.concern==="aging"||answers.second==="aging"||answers.concern==="spot"||answers.second==="spot"||answers.second==="eye")
+    ){
+      r.push("你有明确补水保湿需求、肤况稳定，而且目前没有更优先的进阶功能需求，因此这套组合可以作为高性价比路线。");
+    }
+  }
+
+  if(p.id==="absolute_ampoule"&&!isSensitiveState()){
+    if(answers.concern==="aging"||answers.second==="aging"){
+      r.push("你有明确的细纹或弹性进阶需求，所以这里把浓缩精华作为独立强化步骤加入；它可以和普通精华叠加，并不是二选一。");
+    }else if(answers.concern==="dull"||answers.second==="bright"){
+      r.push("你在意暗沉或气色，而且愿意接受进阶护理，因此浓缩精华可以作为跨系列强化步骤加入，而不是替代原本的精华。");
+    }else if(answers.concern==="dry"||answers.second==="hydration"){
+      r.push("你的补水需求较明确，而且预算与护理步骤允许增加强化护理，所以浓缩精华作为可选升级模块参与方案；它不是基础保湿产品的替代品。");
+    }
+  }
+  if(p.series==="snow"){
+    if(p.id==="snow_toner"&&(answers.concern==="dull"||answers.second==="bright"))
+      r.push("你在意暗沉或肤色状态，雪颜柔肤水在这里承担的是亮肤护理起步，而不是因为“雪颜系列”就整套加入。");
+    if(p.id==="snow_serum"&&(answers.concern==="dull"||answers.second==="bright"))
+      r.push("你有明确的暗沉或气色需求，因此雪颜精华作为整体光泽与平滑护理参与竞争。");
+    if(p.id==="dark_spot"&&(answers.concern==="spot"||answers.second==="spot"))
+      r.push("你明确提到局部色沉或斑点，所以才加入局部针对护理；它不会因为单纯暗沉就自动出现。");
+    if(p.id==="snow_day"&&answers.skin==="dry")
+      r.push("这一步更偏白天的保湿补充，只有你的肤质和完整度确实需要时才加入。");
+    if(p.id==="snow_night"&&(answers.concern==="aging"||answers.second==="aging"))
+      r.push("你同时有弹性进阶需求，所以雪颜晚霜可以在夜间保湿之外参与弹性护理竞争。");
+  }
+
+  return r.join(" ");
+}
+function productHTML(p){
+  const reason=personalReason(p);
+  const optional=p.type==="extra"||p.type==="booster";
+  const roleLabel=p.type==="booster"
+    ?'<span class="tag">进阶强化｜可跨系列搭配</span>'
+    :(p.type==="extra"?'<span class="tag">辅助护理｜非必需步骤</span>':"");
+
+  return `<div class="product-card">
+    <div class="product-title">${p.name} · ¥${p.price}</div>
+    ${roleLabel}
+    <p>${p.what||""}</p>
+    ${reason?`<p><strong>为什么这次会选它？</strong><br>${reason}</p>`:""}
+    <p><strong>怎么用？</strong><br>${p.use||""}</p>
+    <details>
+      <summary>更多详细分析</summary>
+      <div class="detail-body">
+        ${p.ingredients?`<p><strong>配方 / 技术重点</strong><br>${p.ingredients}</p>`:""}
+        ${p.ingredientMeaning?`<p><strong>在方案里的作用</strong><br>${p.ingredientMeaning}</p>`:""}
+      </div>
+    </details>
+  </div>`;
+}
+function bestBundlePurchase(main){
+  const ids=main.map(p=>p.id);
+  const openBudget=answers.budgetLabel==="¥1200以上";
+  let best=null;
+
+  for(const b of BUNDLES.filter(x=>x.eligible)){
+    const matched=b.products.filter(id=>ids.includes(id));
+    const coverage=matched.length/b.products.length;
+
+    /* 3件套要求至少匹配2件；5件套要求至少匹配4件 */
+    const minMatched=b.id==="absolute_set" ? 5 : (b.products.length<=3 ? 2 : 4);
+    if(matched.length<minMatched) continue;
+
+    const matchedProducts=PRODUCTS.filter(p=>matched.includes(p.id));
+    const matchedSingles=matchedProducts.reduce((sum,p)=>sum+p.price,0);
+
+    /* 套装外仍需购买的主方案产品 */
+    const outside=main.filter(p=>!b.products.includes(p.id));
+    const outsideTotal=outside.reduce((sum,p)=>sum+p.price,0);
+
+    const payable=Math.round((b.price+outsideTotal)*100)/100;
+
+    /*
+      普通预算档仍遵守预算上限。
+      ¥1200以上是开放预算，所以像 ¥1450 臻颜套装可以进入比较。
+    */
+    if(!openBudget && payable>answers.budget) continue;
+
+    /* 如果主方案完整覆盖套装，计算真实单买节省 */
+    const allBundleProductsMatched=matched.length===b.products.length;
+    const fullSingles=PRODUCTS
+      .filter(p=>b.products.includes(p.id))
+      .reduce((sum,p)=>sum+p.price,0);
+
+    const saving=allBundleProductsMatched
+      ? Math.round((fullSingles-b.price)*100)/100
+      : null;
+
+    /*
+      高覆盖套装不一定比“只买4件”更便宜，
+      但可以作为完整购买选项展示，不能伪称省钱。
+    */
+    const candidate={
+      ...b,
+      matched,
+      coverage,
+      matchedSingles,
+      outsideTotal,
+      payable,
+      saving,
+      allBundleProductsMatched
+    };
+
+    if(
+      !best ||
+      candidate.coverage>best.coverage ||
+      (
+        candidate.coverage===best.coverage &&
+        candidate.matched.length>best.matched.length
+      )
+    ){
+      best=candidate;
+    }
+  }
+
+  return best;
+}
+function renderMain(list){
+  let html=list.map(productHTML).join("");
+  const singleTotal=totalPrice(list);
+  const purchase=bestBundlePurchase(list);
+  const openBudget=answers.budgetLabel==="¥1200以上";
+
+  /*
+    只有套装100%覆盖主方案对应单品且确实更省时，
+    才把套装价作为“推荐购买金额”。
+    高覆盖但多带产品的套装放到“更划算/更完整买法”里单独解释。
+  */
+  const exactSavingPurchase=
+    purchase &&
+    purchase.allBundleProductsMatched &&
+    purchase.saving!==null &&
+    purchase.saving>0;
+
+  const payable=exactSavingPurchase?purchase.payable:singleTotal;
+  const remaining=openBudget?null:Math.max(0,Math.round((answers.budget-payable)*100)/100);
+
+  html+=`<div class="price-box">`;
+
+  if(exactSavingPurchase){
+    html+=`<div class="small">产品按单品计算约 ¥${singleTotal}</div>
+      <div class="price-total">推荐购买约 ¥${payable}</div>
+      <p class="small">${purchase.name} ¥${purchase.price}${purchase.outsideTotal>0?` + 其他产品 ¥${Math.round(purchase.outsideTotal*100)/100}`:""}｜比全部单买省约 ¥${purchase.saving}</p>`;
+  }else{
+    html+=`<div class="price-total">主方案单品约 ¥${singleTotal}</div>`;
+  }
+
+  if(openBudget){
+    html+=`<p class="small">预算：¥1200以上｜当前按实际需求搭配，不设置“必须花到某个金额”的目标。</p>`;
+  }else{
+    html+=`<p class="small">预算：${answers.budgetLabel}${remaining>0?`｜按主方案剩余约 ¥${remaining}`:""}</p>`;
+  }
+
+  if(
+    (openBudget && payable<1200) ||
+    (!openBudget && remaining>=80)
+  ){
+    html+=`<div class="notice"><strong>为什么没有把预算全部花完？</strong><br><br>${
+      isSensitiveState()&&(answers.second==="spot"||answers.concern==="spot")
+      ?"你虽然还在意局部色沉、斑点，但目前皮肤稳定度优先，所以没有为了花完预算把针对性色沉护理马上加入主方案。"
+      :"预算是上限，不是消费目标。需求明确、步骤有意义时会把方案搭完整；但不会为了提高金额加入重复或低相关产品。"
+    }</div>`;
+  }
+
+  html+=`</div>`;
+  document.getElementById("mainPlan").innerHTML=html;
+}
+/* ================= BUNDLE OPTIMIZATION ================= */
+function buildBundleAdvice(main){
+  const card=document.getElementById("bundleCard");
+  const box=document.getElementById("bundleAdvice");
+  const ids=main.map(p=>p.id);
+  const openBudget=answers.budgetLabel==="¥1200以上";
+  let opts=[];
+
+  for(const b of BUNDLES.filter(x=>x.eligible)){
+    const matched=b.products.filter(id=>ids.includes(id));
+    const minMatched=b.id==="absolute_set" ? 5 : (b.products.length<=3 ? 2 : 4);
+    if(matched.length<minMatched) continue;
+
+    const coverage=matched.length/b.products.length;
+    const outside=main.filter(p=>!b.products.includes(p.id));
+    const outsideTotal=outside.reduce((sum,p)=>sum+p.price,0);
+    const purchaseTotal=Math.round((b.price+outsideTotal)*100)/100;
+
+    if(!openBudget && purchaseTotal>answers.budget) continue;
+
+    const fullSingles=PRODUCTS
+      .filter(p=>b.products.includes(p.id))
+      .reduce((sum,p)=>sum+p.price,0);
+    const fullSaving=Math.round((fullSingles-b.price)*100)/100;
+
+    const missing=b.products
+      .filter(id=>!ids.includes(id))
+      .map(id=>PRODUCTS.find(p=>p.id===id))
+      .filter(Boolean);
+
+    opts.push({
+      ...b,
+      matched,
+      coverage,
+      outside,
+      outsideTotal,
+      purchaseTotal,
+      fullSaving,
+      missing
+    });
+  }
+
+  opts.sort((a,b)=>
+    b.coverage-a.coverage ||
+    b.matched.length-a.matched.length
+  );
+
+  if(!opts.length){
+    card.style.display="none";
+    box.innerHTML="";
+    return;
+  }
+
+  const b=opts[0];
+  const matchedNames=b.matched
+    .map(id=>PRODUCTS.find(p=>p.id===id)?.name)
+    .filter(Boolean);
+
+  let html=`<div class="bundle-box">
+    <strong>${b.name} · ¥${b.price}</strong>
+    <p>你的主方案已经匹配这套中的 <strong>${b.matched.length}/${b.products.length}</strong> 个产品（约 ${Math.round(b.coverage*100)}% 覆盖）。</p>`;
+
+  if(b.matched.length===b.products.length && b.fullSaving>0){
+    html+=`<p>这些产品本来就都在你的推荐方案里，因此直接买套装更合适；按当前单品价比较，约可省 ¥${b.fullSaving}。</p>`;
+  }else{
+    html+=`<p>主方案已经和这个套装高度重合，所以如果你想一次搭得更完整，可以把它作为购买方式考虑。`;
+
+    if(b.missing.length){
+      html+=` 套装还会多包含：${b.missing.map(p=>p.name).join("、")}。这些额外产品不是因为年龄或预算被强行加入，而是套装本身包含的内容。`;
+    }
+
+    html+=`</p>`;
+
+    if(b.outsideTotal>0){
+      html+=`<p>如果采用这个买法，再加上主方案中套装外的产品，合计约 ¥${b.purchaseTotal}。</p>`;
+    }else{
+      html+=`<p>采用套装购买约 ¥${b.price}。</p>`;
+    }
+  }
+
+  html+=`</div>`;
+  box.innerHTML=html;
+  card.style.display="block";
+}
+function buildDailyUse(list){let am=["洁面"],pm=["洁面"];const add=(arr,p,label="")=>p&&arr.push(p.name+label);const toner=list.find(p=>p.step==="toner"),ampoule=list.find(p=>p.step==="ampoule"),serum=list.find(p=>p.step==="serum"),target=list.find(p=>p.step==="target"),eye=list.find(p=>p.step==="eye"),lotion=list.find(p=>p.step==="moisturizer"),cream=list.find(p=>p.step==="cream"),day=list.find(p=>p.step==="daycream"),night=list.find(p=>p.step==="nightcream"),care=list.find(p=>p.type==="care_set");if(toner){add(am,toner);add(pm,toner);}else if(alreadyOwn("toner")){am.push("你现有的化妆水");pm.push("你现有的化妆水");}if(ampoule){add(am,ampoule);add(pm,ampoule);}if(care){am.push("润亮护理精华液");pm.push("润亮护理精华液");}else if(serum){if(answers.steps==="simple"&&answers.concern!=="dry")add(pm,serum);else{add(am,serum);add(pm,serum);}}if(target)add(pm,target,"（局部）");if(eye){if(answers.steps==="simple")add(pm,eye);else{add(am,eye);add(pm,eye);}}if(care){am.push("润亮护理营养霜");pm.push("润亮护理营养霜");}else if(day||night){add(am,day);add(pm,night||day);}else if(lotion&&cream){add(am,lotion);add(pm,lotion);add(pm,cream);}else if(lotion){add(am,lotion);add(pm,lotion);}else if(cream){if(answers.skin==="dry")add(am,cream);add(pm,cream);}else if(alreadyOwn("moisturizer")){am.push("你现有的乳液 / 面霜");pm.push("你现有的乳液 / 面霜");}document.getElementById("dailyUse").innerHTML=`<strong>☀️ 早上</strong><br>${am.join(" → ")}<hr><strong>🌙 晚上</strong><br>${pm.join(" → ")}<p class="small">如果当天有需要卸除的彩妆或防晒，晚上先做好卸除和清洁，再进入后面的护理步骤。</p>`;}
+
+function buildNextBuy(main){const remaining=answers.budget-totalPrice(main);if(isSensitiveState()){document.getElementById("nextBuy").innerHTML=(answers.second==="spot"||answers.second==="bright")?`你还在意 <strong>${concernText(answers.second)}</strong>，但现在稳定度优先。先把基础护理用稳定；之后再考虑雪颜等针对性路线。${!main.some(p=>p.id==="soothing_mist")&&remaining>=76?"<br><br>如果只是想增加一个辅助步骤，可以了解 <strong>舒缓喷雾 · ¥76</strong>，但它不是必买。":""}`:"目前更重要的是把基础护理保持简单，不需要为了增加数量继续购买。";return;}const candidates=PRODUCTS.filter(p=>p.type!=="care_set"&&p.type!=="extra"&&!main.some(x=>x.id===p.id)&&!alreadyOwn(p.step)).sort((a,b)=>priority(b)-priority(a));const next=candidates.find(p=>p.price<=remaining)||candidates[0];document.getElementById("nextBuy").innerHTML=next?`${next.price<=remaining?"预算里还放得下这一件。":"以后愿意增加预算时，可以优先考虑。"}<br><br><strong>${next.name} · ¥${next.price}</strong><br><br>${next.simple}`:"目前主要护理已经比较完整，不需要为了增加数量继续购买。";}
+function compactPlanHTML(list){
+  if(!list||!list.length)return '<p class="small">目前没有需要额外增加的产品。</p>';
+  return list.map(p=>`
+    <div class="plan-line">
+      <strong>${p.name}</strong> · ¥${p.price}
+      ${p.type==="booster"?'<div class="small">进阶强化，可与基础精华搭配</div>':""}
+      ${p.type==="extra"?'<div class="small">辅助护理，非必需步骤</div>':""}
+    </div>
+  `).join("");
+}
+
+/* ================= PROFILE / RESULTS ================= */
+function buildProfile(){const data={sensitive:["现在更适合先稳定下来","你提到了泛红、不舒服或状态不稳定。现在最重要的是先把护理方向收稳，而不是把预算花满。"],dry:["先把缺水和干燥照顾好","这套会优先考虑真正能帮助你做好保湿和滋润收尾的步骤。"],spot:["把重点放在真正相关的色沉护理","针对性护理会和基础步骤一起竞争预算，不会因为某个系列更贵就整套升级。"],aging:["把预算放在更有针对性的步骤","精华、眼周等步骤的优先级会根据你的实际需求上升，但年龄只作辅助。"],dull:["基础护理和气色一起考虑","先保证日常护理结构合理，再选择与你的暗沉、气色需求真正相关的路线。"],basic:["把每天真正会用的护理搭好","比起产品越多，先搭出一套你每天愿意坚持的护理更重要。"]};const d=data[answers.concern]||data.basic;document.getElementById("customerTitle").innerText=customerName+"的专属护肤方案";document.getElementById("resultTitle").innerText=d[0];document.getElementById("resultIntro").innerText=d[1];document.getElementById("profileSummary").innerHTML=`<span class="tag">${answers.age}</span><span class="tag">${skinText(answers.skin)}</span><span class="tag">主要：${concernText(answers.concern)}</span>${answers.second!=="none"?`<span class="tag">其次：${concernText(answers.second)}</span>`:""}<span class="tag">预算：${answers.budgetLabel}</span>`;document.getElementById("existingProductNote").innerHTML=answers.owned.includes("unsure")?`<div class="notice"><strong>家里已有其他品牌产品？</strong><br>如果现在用起来舒服，不需要为了换品牌全部重新买。下面的推荐也可以作为以后刚好要替换某一步时的参考。</div>`:"";document.getElementById("advisorResult").innerText=advisorName;}
+function buildResults(){
+  buildProfile();
+
+  const main=buildMainPlan();
+  const simple=buildSimplePlan(main);
+  const full=buildFullPlan(main);
+
+  renderMain(main);
+  buildBundleAdvice(main);
+  buildDailyUse(main);
+  buildNextBuy(main);
+
+  document.getElementById("simplePlan").innerHTML=compactPlanHTML(simple);
+
+  const fullWrap=document.getElementById("fullPlanWrap");
+  let fullHTML="";
+
+  if(full.mode==="sensitive"){
+    const hasLaterTarget=answers.concern==="spot"||answers.second==="spot";
+    if(hasLaterTarget){
+      fullWrap.style.display="";
+      fullHTML=`<div class="notice"><strong>当前先不把护理继续加复杂。</strong><br><br>先把舒缓修护路线用稳定。状态稳定后，如果仍然在意局部色沉、斑点，可以再考虑艾诗洛特雪颜斑点修护乳 · ¥120。</div>`;
+    }else{
+      fullWrap.style.display="none";
+    }
+  }else if(!full.changed){
+    /* 主方案已经覆盖了有意义的步骤，就不要再出现“想搭得更完整” */
+    fullWrap.style.display="none";
+  }else{
+    fullWrap.style.display="";
+    const fp=full.products;
+    const ft=totalPrice(fp);
+    const ownedReplacement=answers.owned.some(x=>["toner","serum","moisturizer"].includes(x));
+
+    fullHTML=`<p>如果你之后想把现有产品换成我们可以提供的完整搭配，可以参考：</p>
+      ${compactPlanHTML(fp)}`;
+
+    if(ownedReplacement){
+      fullHTML+=`<div class="plan-note">你已经有正在使用、暂时不想替换的产品，所以它们没有被强行放进主方案。这里展示的是<strong>以后需要替换或想整套调整时</strong>可以参考的完整路线，不代表现在必须重复购买。</div>`;
+    }
+
+    if(answers.budgetLabel==="¥1200以上"){
+      fullHTML+=`<div class="notice">这套完整参考约 ¥${ft}。¥1200以上属于开放预算档，仍然只保留有明确作用的步骤。</div>`;
+    }else if(ft>answers.budget){
+      fullHTML+=`<div class="notice">完整参考约 ¥${ft}，超过当前预算约 ¥${Math.round((ft-answers.budget)*100)/100}。可以等现有产品用完后再逐步替换，不需要一次买齐。</div>`;
+    }else{
+      fullHTML+=`<div class="notice">这套完整参考约 ¥${ft}，仍在当前预算范围内。即使还有余额，也不会继续增加没有明确需要的产品。</div>`;
+    }
+  }
+
+  document.getElementById("fullPlan").innerHTML=fullHTML;
+}
+function editAnswers(){document.getElementById("results").style.display="none";document.getElementById("quiz").style.display="block";current=1;showQuestion();window.scrollTo(0,0);}
+function restartQuiz(){answers={owned:[]};current=1;document.querySelectorAll('input[type="checkbox"]').forEach(x=>x.checked=false);document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));document.getElementById("results").style.display="none";document.getElementById("home").style.display="block";window.scrollTo(0,0);}
+function concernText(v){return({dry:"干燥、缺水",sensitive:"泛红、不稳定",dull:"暗沉、气色",bright:"暗沉、气色",spot:"局部色沉、斑点",aging:"细纹、弹性",hydration:"补水、滋润",eye:"眼周干纹、细纹",basic:"基础保养",none:"没有"})[v]||v;}
+function skinText(v){return({dry:"偏干肤质",normal:"中性肤质",combo:"混合肤质",oily:"偏油肤质",sensitive:"易敏感 / 不稳定肤质"})[v]||v;}
+function loadAdvisor(){
+  const advisor=new URLSearchParams(window.location.search).get("advisor");
+  const input=document.getElementById("advisorName");
+  const locked=document.getElementById("advisorLocked");
+  if(advisor && advisor.trim()){
+    const name=advisor.trim();
+    input.value=name;
+    input.style.display="none";
+    locked.textContent=name;
+    locked.style.display="block";
+  }else{
+    input.style.display="block";
+    locked.style.display="none";
+  }
+}
+loadAdvisor();
+</script>
+
+</body>
+</html>
